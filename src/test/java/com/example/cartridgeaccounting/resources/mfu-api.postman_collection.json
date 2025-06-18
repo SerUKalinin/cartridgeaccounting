@@ -1,0 +1,185 @@
+{
+  "info": {
+    "name": "API учёта картриджей МФУ",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Коллекция для ручного тестирования REST API системы учёта картриджей МФУ. Используйте переменную baseUrl (например, http://localhost:8080) и Basic Auth (admin/admin123)."
+  },
+  "item": [
+    {
+      "name": "Картриджи — Получить все",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "auth": { "type": "basic", "basic": [ { "key": "username", "value": "admin" }, { "key": "password", "value": "admin123" } ] },
+        "url": { "raw": "{{baseUrl}}/api/cartridges", "host": [ "{{baseUrl}}" ], "path": [ "api", "cartridges" ] }
+      },
+      "description": "Получить список всех картриджей с пагинацией."
+    },
+    {
+      "name": "Картриджи — Создать",
+      "request": {
+        "method": "POST",
+        "header": [ { "key": "Content-Type", "value": "application/json" } ],
+        "auth": { "type": "basic", "basic": [ { "key": "username", "value": "admin" }, { "key": "password", "value": "admin123" } ] },
+        "body": { "mode": "raw", "raw": "{\n  \"model\": \"HP 26A\",\n  \"serialNumber\": \"HP26A-NEW\",\n  \"resourcePages\": 2000,\n  \"description\": \"Тестовый картридж\"\n}" },
+        "url": { "raw": "{{baseUrl}}/api/cartridges", "host": [ "{{baseUrl}}" ], "path": [ "api", "cartridges" ] }
+      },
+      "description": "Создать новый картридж."
+    },
+    {
+      "name": "Картриджи — Получить по ID",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "auth": { "type": "basic", "basic": [ { "key": "username", "value": "admin" }, { "key": "password", "value": "admin123" } ] },
+        "url": { "raw": "{{baseUrl}}/api/cartridges/{{cartridgeId}}", "host": [ "{{baseUrl}}" ], "path": [ "api", "cartridges", "{{cartridgeId}}" ] }
+      },
+      "description": "Получить картридж по его уникальному идентификатору."
+    },
+    {
+      "name": "Картриджи — Поиск",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "auth": { "type": "basic", "basic": [ { "key": "username", "value": "admin" }, { "key": "password", "value": "admin123" } ] },
+        "url": { "raw": "{{baseUrl}}/api/cartridges/search?model=HP 26A&serialNumber=HP26A-NEW", "host": [ "{{baseUrl}}" ], "path": [ "api", "cartridges", "search" ], "query": [ { "key": "model", "value": "HP 26A" }, { "key": "serialNumber", "value": "HP26A-NEW" } ] }
+      },
+      "description": "Поиск картриджей по модели и/или серийному номеру."
+    },
+    {
+      "name": "Картриджи — Обновить",
+      "request": {
+        "method": "PUT",
+        "header": [ { "key": "Content-Type", "value": "application/json" } ],
+        "auth": { "type": "basic", "basic": [ { "key": "username", "value": "admin" }, { "key": "password", "value": "admin123" } ] },
+        "body": { "mode": "raw", "raw": "{\n  \"model\": \"HP 26A\",\n  \"serialNumber\": \"HP26A-UPDATED\",\n  \"resourcePages\": 2100,\n  \"description\": \"Обновленный картридж\"\n}" },
+        "url": { "raw": "{{baseUrl}}/api/cartridges/{{cartridgeId}}", "host": [ "{{baseUrl}}" ], "path": [ "api", "cartridges", "{{cartridgeId}}" ] }
+      },
+      "description": "Обновить данные картриджа по ID."
+    },
+    {
+      "name": "Картриджи — Удалить",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "auth": { "type": "basic", "basic": [ { "key": "username", "value": "admin" }, { "key": "password", "value": "admin123" } ] },
+        "url": { "raw": "{{baseUrl}}/api/cartridges/{{cartridgeId}}", "host": [ "{{baseUrl}}" ], "path": [ "api", "cartridges", "{{cartridgeId}}" ] }
+      },
+      "description": "Удалить картридж по ID."
+    },
+    {
+      "name": "Объекты — Получить все",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "auth": { "type": "basic", "basic": [ { "key": "username", "value": "admin" }, { "key": "password", "value": "admin123" } ] },
+        "url": { "raw": "{{baseUrl}}/api/locations", "host": [ "{{baseUrl}}" ], "path": [ "api", "locations" ] }
+      },
+      "description": "Получить список всех объектов/мест хранения."
+    },
+    {
+      "name": "Объекты — Создать",
+      "request": {
+        "method": "POST",
+        "header": [ { "key": "Content-Type", "value": "application/json" } ],
+        "auth": { "type": "basic", "basic": [ { "key": "username", "value": "admin" }, { "key": "password", "value": "admin123" } ] },
+        "body": { "mode": "raw", "raw": "{\n  \"name\": \"Офис 2\",\n  \"address\": \"ул. Новая, 5\",\n  \"contactPerson\": \"Иванов И.И.\",\n  \"contactPhone\": \"+7-999-555-55-55\",\n  \"description\": \"Второй офис\",\n  \"active\": true\n}" },
+        "url": { "raw": "{{baseUrl}}/api/locations", "host": [ "{{baseUrl}}" ], "path": [ "api", "locations" ] }
+      },
+      "description": "Создать новый объект/место хранения."
+    },
+    {
+      "name": "Объекты — Получить по ID",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "auth": { "type": "basic", "basic": [ { "key": "username", "value": "admin" }, { "key": "password", "value": "admin123" } ] },
+        "url": { "raw": "{{baseUrl}}/api/locations/{{locationId}}", "host": [ "{{baseUrl}}" ], "path": [ "api", "locations", "{{locationId}}" ] }
+      },
+      "description": "Получить объект/место хранения по его уникальному идентификатору."
+    },
+    {
+      "name": "Объекты — Обновить",
+      "request": {
+        "method": "PUT",
+        "header": [ { "key": "Content-Type", "value": "application/json" } ],
+        "auth": { "type": "basic", "basic": [ { "key": "username", "value": "admin" }, { "key": "password", "value": "admin123" } ] },
+        "body": { "mode": "raw", "raw": "{\n  \"name\": \"Офис 2 (обновлён)\",\n  \"address\": \"ул. Новая, 5\",\n  \"contactPerson\": \"Иванов И.И.\",\n  \"contactPhone\": \"+7-999-555-55-55\",\n  \"description\": \"Второй офис обновлён\",\n  \"active\": true\n}" },
+        "url": { "raw": "{{baseUrl}}/api/locations/{{locationId}}", "host": [ "{{baseUrl}}" ], "path": [ "api", "locations", "{{locationId}}" ] }
+      },
+      "description": "Обновить объект/место хранения по ID."
+    },
+    {
+      "name": "Объекты — Удалить",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "auth": { "type": "basic", "basic": [ { "key": "username", "value": "admin" }, { "key": "password", "value": "admin123" } ] },
+        "url": { "raw": "{{baseUrl}}/api/locations/{{locationId}}", "host": [ "{{baseUrl}}" ], "path": [ "api", "locations", "{{locationId}}" ] }
+      },
+      "description": "Удалить объект/место хранения по ID."
+    },
+    {
+      "name": "Операции — Получить все",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "auth": { "type": "basic", "basic": [ { "key": "username", "value": "admin" }, { "key": "password", "value": "admin123" } ] },
+        "url": { "raw": "{{baseUrl}}/api/operations", "host": [ "{{baseUrl}}" ], "path": [ "api", "operations" ] }
+      },
+      "description": "Получить список всех операций с пагинацией."
+    },
+    {
+      "name": "Операции — Создать",
+      "request": {
+        "method": "POST",
+        "header": [ { "key": "Content-Type", "value": "application/json" } ],
+        "auth": { "type": "basic", "basic": [ { "key": "username", "value": "admin" }, { "key": "password", "value": "admin123" } ] },
+        "body": { "mode": "raw", "raw": "{\n  \"type\": \"RECEIPT\",\n  \"count\": 1,\n  \"cartridgeId\": \"{{cartridgeId}}\",\n  \"locationId\": \"{{locationId}}\",\n  \"notes\": \"Поступление на склад\"\n}" },
+        "url": { "raw": "{{baseUrl}}/api/operations", "host": [ "{{baseUrl}}" ], "path": [ "api", "operations" ] }
+      },
+      "description": "Создать новую операцию с картриджем."
+    },
+    {
+      "name": "Пользователи — Получить всех",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "auth": { "type": "basic", "basic": [ { "key": "username", "value": "admin" }, { "key": "password", "value": "admin123" } ] },
+        "url": { "raw": "{{baseUrl}}/api/users", "host": [ "{{baseUrl}}" ], "path": [ "api", "users" ] }
+      },
+      "description": "Получить список всех пользователей с пагинацией."
+    },
+    {
+      "name": "Пользователи — Создать",
+      "request": {
+        "method": "POST",
+        "header": [ { "key": "Content-Type", "value": "application/json" } ],
+        "auth": { "type": "basic", "basic": [ { "key": "username", "value": "admin" }, { "key": "password", "value": "admin123" } ] },
+        "body": { "mode": "raw", "raw": "{\n  \"username\": \"testuser\",\n  \"password\": \"testpass\",\n  \"fullName\": \"Тестовый пользователь\",\n  \"role\": \"OBJECT_USER\",\n  \"enabled\": true\n}" },
+        "url": { "raw": "{{baseUrl}}/api/users", "host": [ "{{baseUrl}}" ], "path": [ "api", "users" ] }
+      },
+      "description": "Создать нового пользователя."
+    }
+  ],
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:8080" },
+    { "key": "cartridgeId", "value": "" },
+    { "key": "locationId", "value": "" }
+  ]
+} 
+        "method": "POST",
+        "header": [ { "key": "Content-Type", "value": "application/json" } ],
+        "auth": { "type": "basic", "basic": [ { "key": "username", "value": "admin" }, { "key": "password", "value": "admin123" } ] },
+        "body": { "mode": "raw", "raw": "{\n  \"username\": \"testuser\",\n  \"password\": \"testpass\",\n  \"fullName\": \"Тестовый пользователь\",\n  \"role\": \"OBJECT_USER\",\n  \"enabled\": true\n}" },
+        "url": { "raw": "{{baseUrl}}/api/users", "host": [ "{{baseUrl}}" ], "path": [ "api", "users" ] }
+      },
+      "description": "Создать нового пользователя."
+    }
+  ],
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:8080" },
+    { "key": "cartridgeId", "value": "" },
+    { "key": "locationId", "value": "" }
+  ]
+} 

@@ -1,0 +1,21 @@
+services:
+  postgres:
+    image: postgres:15
+    container_name: cartridge_postgres
+    environment:
+      POSTGRES_DB: cartridge_db
+      POSTGRES_USER: dev
+      POSTGRES_PASSWORD: devpass
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - cartridge_network
+
+volumes:
+  postgres_data:
+
+networks:
+  cartridge_network:
+    driver: bridge 
