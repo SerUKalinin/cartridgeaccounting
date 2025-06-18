@@ -45,9 +45,6 @@
    
    -- Подключитесь к базе данных
    \c cartridge_db;
-   
-   -- Выполните скрипт создания таблиц (опционально, если не используется JPA ddl-auto: update)
-   -- \i src/main/resources/schema.sql
    ```
 
 3. **Обновите настройки в `src/main/resources/application.yml`**:
@@ -59,12 +56,15 @@
        password: your_password
    ```
 
-4. **Запустите приложение**:
+4. **Liquibase**
+   - Структура базы данных и тестовые данные создаются автоматически при первом запуске приложения с помощью Liquibase (см. changelog-файлы в `src/main/resources/db/changelog/`).
+
+5. **Запустите приложение**:
    ```bash
    ./gradlew bootRun
    ```
 
-5. **Откройте Swagger UI**:
+6. **Откройте Swagger UI**:
    ```
    http://localhost:8080/swagger-ui.html
    ```

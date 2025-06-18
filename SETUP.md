@@ -26,6 +26,9 @@
    GRANT ALL PRIVILEGES ON DATABASE cartridge_db TO postgres;
    ```
 
+3. **Liquibase**
+   - Структура базы данных и тестовые данные создаются автоматически при первом запуске приложения с помощью Liquibase (см. changelog-файлы в `src/main/resources/db/changelog/`).
+
 ## Настройка приложения
 
 1. **Клонируйте репозиторий**:
