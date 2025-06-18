@@ -4,7 +4,6 @@ import { BrowserRouter as Router, Routes, Route, Navigate, Outlet } from 'react-
 import LoginPage from './pages/LoginPage';
 import DashboardPage from './pages/DashboardPage';
 import ThemeToggle from './components/ThemeToggle';
-import RegistrationPage from './pages/RegistrationPage';
 
 const PrivateRoute: React.FC = () => {
   const token = localStorage.getItem('token') || sessionStorage.getItem('token');
@@ -45,7 +44,6 @@ const App: React.FC = () => {
           <Container maxWidth="sm" sx={{ py: 4 }}>
             <Routes>
               <Route path="/login" element={<LoginPage />} />
-              <Route path="/register" element={<RegistrationPage />} />
               <Route element={<PrivateRoute />}>
                 <Route path="/dashboard" element={<DashboardPage />} />
               </Route>
