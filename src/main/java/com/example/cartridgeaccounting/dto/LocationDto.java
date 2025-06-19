@@ -33,6 +33,11 @@ public class LocationDto {
     private String address;
     
     /**
+     * Кабинет/помещение
+     */
+    private String cabinet;
+    
+    /**
      * Контактное лицо на объекте
      */
     private String contactPerson;
@@ -51,4 +56,9 @@ public class LocationDto {
      * Статус активности объекта
      */
     private boolean active;
+    
+    /**
+     * Количество картриджей на объекте
+     */
+    private long cartridgeCount;
 } 

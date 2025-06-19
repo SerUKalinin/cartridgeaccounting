@@ -87,4 +87,28 @@ public class Cartridge {
     protected void onUpdate() {
         updatedAt = LocalDateTime.now();
     }
+
+    /**
+     * Бренд картриджа
+     */
+    @Column(name = "brand")
+    private String brand;
+
+    /**
+     * Артикул производителя (Part Number)
+     */
+    @Column(name = "part_number")
+    private String partNumber;
+
+    /**
+     * Цвет картриджа
+     */
+    @Column(name = "color")
+    private String color;
+
+    /**
+     * Совместимость с принтерами (строка)
+     */
+    @Column(name = "compatible_printers")
+    private String compatiblePrinters;
 } 

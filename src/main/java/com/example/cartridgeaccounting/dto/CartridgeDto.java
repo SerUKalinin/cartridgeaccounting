@@ -71,4 +71,24 @@ public class CartridgeDto {
      * Дата и время последнего обновления записи
      */
     private LocalDateTime updatedAt;
+
+    /**
+     * Бренд картриджа
+     */
+    private String brand;
+
+    /**
+     * Артикул производителя (Part Number)
+     */
+    private String partNumber;
+
+    /**
+     * Цвет картриджа
+     */
+    private String color;
+
+    /**
+     * Совместимость с принтерами (строка)
+     */
+    private String compatiblePrinters;
 } 

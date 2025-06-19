@@ -85,6 +85,26 @@ public class GlobalExceptionHandler {
     }
 
     /**
+     * Обрабатывает исключения при попытке удалить объект со связанными картриджами
+     * 
+     * @param ex исключение наличия связанных картриджей
+     * @return ответ с ошибкой 409
+     */
+    @ExceptionHandler(LocationHasCartridgesException.class)
+    public ResponseEntity<ErrorResponse> handleLocationHasCartridgesException(LocationHasCartridgesException ex) {
+        log.warn("Попытка удаления объекта со связанными картриджами: {}", ex.getMessage());
+        
+        ErrorResponse errorResponse = new ErrorResponse(
+                LocalDateTime.now(),
+                HttpStatus.CONFLICT.value(),
+                "Невозможно удалить объект",
+                ex.getMessage()
+        );
+        
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
+    }
+
+    /**
      * Обрабатывает исключения при дублировании серийного номера картриджа
      * 
      * @param ex исключение дублирования серийного номера

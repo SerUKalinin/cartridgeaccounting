@@ -29,6 +29,12 @@ public class CreateLocationRequest {
     private String address;
     
     /**
+     * Кабинет/помещение
+     */
+    @Size(max = 64, message = "Кабинет не должен превышать 64 символа")
+    private String cabinet;
+    
+    /**
      * Контактное лицо на объекте
      */
     @Size(max = 100, message = "Имя контактного лица не должно превышать 100 символов")

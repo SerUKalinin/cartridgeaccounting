@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import LoginForm from '../components/LoginForm';
 import RegistrationForm from '../components/RegistrationForm';
@@ -10,8 +10,21 @@ const LoginPage: React.FC = () => {
   const [showRegister, setShowRegister] = useState(false);
   const [registerSuccess, setRegisterSuccess] = useState(false);
 
+  // Проверяем, есть ли уже токен при загрузке страницы
+  useEffect(() => {
+    const token = localStorage.getItem('token') || sessionStorage.getItem('token');
+    if (token) {
+      const redirectPath = localStorage.getItem('redirectPath') || '/dashboard';
+      localStorage.removeItem('redirectPath');
+      navigate(redirectPath, { replace: true });
+    }
+  }, [navigate]);
+
   const handleLoginSuccess = (token: string, role: string) => {
-    navigate('/dashboard');
+    // После успешного входа перенаправляем на сохраненную страницу или dashboard
+    const redirectPath = localStorage.getItem('redirectPath') || '/dashboard';
+    localStorage.removeItem('redirectPath');
+    navigate(redirectPath, { replace: true });
   };
 
   const handleRegisterSuccess = () => {

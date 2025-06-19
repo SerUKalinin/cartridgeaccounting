@@ -40,4 +40,11 @@ public interface CartridgeRepository extends JpaRepository<Cartridge, UUID> {
     @Query("SELECT COUNT(c) FROM Cartridge c WHERE c.currentLocation = :location AND c.status = :status")
     long countByLocationAndStatus(@Param("location") Location location, 
                                  @Param("status") CartridgeStatus status);
+    
+    @Query("SELECT COUNT(c) FROM Cartridge c WHERE c.currentLocation = :location AND c.status = :status")
+    long countByCurrentLocationAndStatus(@Param("location") Location location, 
+                                        @Param("status") CartridgeStatus status);
+    
+    @Query("SELECT COUNT(c) FROM Cartridge c WHERE c.currentLocation = :location")
+    long countByCurrentLocation(@Param("location") Location location);
 } 

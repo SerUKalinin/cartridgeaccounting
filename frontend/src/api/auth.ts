@@ -1,4 +1,4 @@
-import axios from 'axios';
+import api from './index';
 
 export interface AuthRequest {
   username: string;
@@ -13,14 +13,15 @@ export interface AuthResponse {
 export interface CreateUserRequest {
   username: string;
   password: string;
-  role: string; // ADMIN, USER, etc.
+  fullName: string;
+  role: string;
 }
 
 export async function login(data: AuthRequest): Promise<AuthResponse> {
-  const response = await axios.post<AuthResponse>('/api/auth/login', data);
+  const response = await api.post<AuthResponse>('/api/auth/login', data);
   return response.data;
 }
 
 export async function register(data: CreateUserRequest): Promise<void> {
-  await axios.post('/api/auth/register', data);
+  await api.post('/api/auth/register', data);
 } 

@@ -34,6 +34,7 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
             .csrf(csrf -> csrf.disable())
+            .cors(cors -> cors.configure(http)) // Включаем CORS
             .authorizeHttpRequests(authz -> authz
                 // Разрешаем доступ к Swagger UI и API документации
                 .requestMatchers("/swagger-ui/**", "/swagger-ui.html").permitAll()
@@ -44,6 +45,7 @@ public class SecurityConfig {
                 // Разрешаем регистрацию и логин без авторизации
                 .requestMatchers(org.springframework.http.HttpMethod.POST, "/api/users").permitAll()
                 .requestMatchers(org.springframework.http.HttpMethod.POST, "/api/auth/login").permitAll()
+                .requestMatchers(org.springframework.http.HttpMethod.POST, "/api/auth/register").permitAll()
                 // Все остальные запросы требуют JWT
                 .anyRequest().authenticated()
             )

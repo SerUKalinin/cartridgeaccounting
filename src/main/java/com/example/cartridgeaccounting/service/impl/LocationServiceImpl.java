@@ -4,7 +4,9 @@ import com.example.cartridgeaccounting.dto.CreateLocationRequest;
 import com.example.cartridgeaccounting.dto.LocationDto;
 import com.example.cartridgeaccounting.entity.Location;
 import com.example.cartridgeaccounting.exception.LocationNotFoundException;
+import com.example.cartridgeaccounting.exception.LocationHasCartridgesException;
 import com.example.cartridgeaccounting.repository.LocationRepository;
+import com.example.cartridgeaccounting.repository.CartridgeRepository;
 import com.example.cartridgeaccounting.service.LocationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,6 +33,7 @@ import java.util.stream.Collectors;
 public class LocationServiceImpl implements LocationService {
     
     private final LocationRepository locationRepository;
+    private final CartridgeRepository cartridgeRepository;
     
     /**
      * {@inheritDoc}
@@ -42,6 +45,7 @@ public class LocationServiceImpl implements LocationService {
         Location location = new Location();
         location.setName(request.getName());
         location.setAddress(request.getAddress());
+        location.setCabinet(request.getCabinet());
         location.setContactPerson(request.getContactPerson());
         location.setContactPhone(request.getContactPhone());
         location.setDescription(request.getDescription());
@@ -134,6 +138,7 @@ public class LocationServiceImpl implements LocationService {
         
         location.setName(request.getName());
         location.setAddress(request.getAddress());
+        location.setCabinet(request.getCabinet());
         location.setContactPerson(request.getContactPerson());
         location.setContactPhone(request.getContactPhone());
         location.setDescription(request.getDescription());
@@ -151,9 +156,17 @@ public class LocationServiceImpl implements LocationService {
     @Override
     public void deleteLocation(UUID id) {
         log.info("Удаление объекта с ID: {}", id);
-        if (!locationRepository.existsById(id)) {
-            throw new LocationNotFoundException(id);
+        
+        Location location = locationRepository.findById(id)
+                .orElseThrow(() -> new LocationNotFoundException(id));
+        
+        // Проверяем, есть ли картриджи, связанные с этим объектом
+        long cartridgeCount = cartridgeRepository.countByCurrentLocation(location);
+        if (cartridgeCount > 0) {
+            log.warn("Попытка удаления объекта с ID: {}, который имеет {} связанных картриджей", id, cartridgeCount);
+            throw new LocationHasCartridgesException(id, location.getName(), cartridgeCount);
         }
+        
         locationRepository.deleteById(id);
         log.info("Объект удален с ID: {}", id);
     }
@@ -183,10 +196,16 @@ public class LocationServiceImpl implements LocationService {
         dto.setId(location.getId());
         dto.setName(location.getName());
         dto.setAddress(location.getAddress());
+        dto.setCabinet(location.getCabinet());
         dto.setContactPerson(location.getContactPerson());
         dto.setContactPhone(location.getContactPhone());
         dto.setDescription(location.getDescription());
         dto.setActive(location.isActive());
+        
+        // Подсчитываем количество картриджей на объекте
+        long cartridgeCount = cartridgeRepository.countByCurrentLocation(location);
+        dto.setCartridgeCount(cartridgeCount);
+        
         return dto;
     }
 } 

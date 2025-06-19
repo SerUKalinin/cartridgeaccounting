@@ -3,3 +3,9 @@ databaseChangeLog:
       file: db/changelog/01-create-tables.sql
   - include:
       file: db/changelog/02-insert-initial-users.sql
+  - include:
+      file: db/changelog/04-add-cartridge-extra-fields.sql
+  - include:
+      file: db/changelog/03-insert-test-data.sql 
+  - include:
+      file: db/changelog/05-add-location-cabinet.sql 

@@ -41,6 +41,12 @@ public class Location {
     private String address;
     
     /**
+     * Кабинет/помещение
+     */
+    @Column(name = "cabinet")
+    private String cabinet;
+    
+    /**
      * Контактное лицо на объекте
      */
     @Column(name = "contact_person")

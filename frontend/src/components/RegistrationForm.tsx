@@ -1,13 +1,9 @@
 import React, { useState } from 'react';
-import { Box, Button, TextField, Typography, Avatar, MenuItem, FormControlLabel, Checkbox, Paper } from '@mui/material';
+import { Box, Button, TextField, Typography, Avatar, MenuItem, FormControlLabel, Checkbox, Paper, Alert, CircularProgress } from '@mui/material';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import axios from 'axios';
-
-const roles = [
-  { value: 'ADMIN', label: 'Администратор' },
-  { value: 'WAREHOUSE_MANAGER', label: 'Заведующий складом' },
-  { value: 'OBJECT_USER', label: 'Пользователь объекта' },
-];
+import { register } from '../api/auth';
+import { getRoleOptions } from '../utils/roleTranslations';
 
 interface RegistrationFormProps {
   onSuccess: () => void;
@@ -16,33 +12,44 @@ interface RegistrationFormProps {
 const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSuccess }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [fullName, setFullName] = useState('');
   const [role, setRole] = useState('OBJECT_USER');
   const [enabled, setEnabled] = useState(true);
-  const [error, setError] = useState('');
+  const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const roles = getRoleOptions();
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
-    setSuccess('');
-    setLoading(true);
+    
+    if (password !== confirmPassword) {
+      setError('Пароли не совпадают');
+      return;
+    }
+
+    if (password.length < 6) {
+      setError('Пароль должен содержать минимум 6 символов');
+      return;
+    }
+
     try {
-      await axios.post('/api/users', {
+      setLoading(true);
+      setError(null);
+      
+      await register({
         username,
         password,
         fullName,
-        role,
-        enabled,
+        role
       });
-      setSuccess('Регистрация успешна! Теперь вы можете войти.');
-      setTimeout(() => {
-        setSuccess('');
-        onSuccess();
-      }, 1500);
+      
+      onSuccess();
     } catch (err: any) {
-      setError(err.response?.data || 'Ошибка регистрации');
+      console.error('Registration error:', err);
+      setError(err.response?.data?.message || 'Ошибка при регистрации');
     } finally {
       setLoading(false);
     }
@@ -59,6 +66,11 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSuccess }) => {
         </Typography>
       </Box>
       <Box component="form" onSubmit={handleSubmit}>
+        {error && (
+          <Alert severity="error" sx={{ mb: 2 }}>
+            {error}
+          </Alert>
+        )}
         <TextField
           margin="normal"
           required
@@ -67,15 +79,6 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSuccess }) => {
           value={username}
           onChange={(e) => setUsername(e.target.value)}
           autoFocus
-        />
-        <TextField
-          margin="normal"
-          required
-          fullWidth
-          label="Пароль"
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
         />
         <TextField
           margin="normal"
@@ -100,11 +103,28 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSuccess }) => {
             </MenuItem>
           ))}
         </TextField>
+        <TextField
+          margin="normal"
+          required
+          fullWidth
+          label="Пароль"
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        <TextField
+          margin="normal"
+          required
+          fullWidth
+          label="Подтвердите пароль"
+          type="password"
+          value={confirmPassword}
+          onChange={(e) => setConfirmPassword(e.target.value)}
+        />
         <FormControlLabel
           control={<Checkbox checked={enabled} onChange={(e) => setEnabled(e.target.checked)} color="primary" />}
           label="Активен"
         />
-        {error && <Typography color="error" variant="body2">{error}</Typography>}
         {success && <Typography color="primary" variant="body2">{success}</Typography>}
         <Button
           type="submit"
@@ -112,6 +132,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSuccess }) => {
           variant="contained"
           sx={{ mt: 3, mb: 2 }}
           disabled={loading}
+          startIcon={loading ? <CircularProgress size={16} /> : undefined}
         >
           {loading ? 'Регистрация...' : 'Зарегистрироваться'}
         </Button>

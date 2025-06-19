@@ -1,17 +1,63 @@
 import React, { useMemo, useState } from 'react';
-import { ThemeProvider, createTheme, CssBaseline, Box, AppBar, Toolbar, Typography, Container } from '@mui/material';
+import { ThemeProvider, createTheme, CssBaseline, Box } from '@mui/material';
 import { BrowserRouter as Router, Routes, Route, Navigate, Outlet } from 'react-router-dom';
 import LoginPage from './pages/LoginPage';
 import DashboardPage from './pages/DashboardPage';
-import ThemeToggle from './components/ThemeToggle';
+import UsersPage from './pages/UsersPage';
+import CartridgesPage from './pages/CartridgesPage';
+import LocationsPage from './pages/LocationsPage';
+import OperationsPage from './pages/OperationsPage';
+import ReportsPage from './pages/ReportsPage';
+import AppLayout from './components/layout/AppLayout';
 
+// Компонент для проверки авторизации
 const PrivateRoute: React.FC = () => {
   const token = localStorage.getItem('token') || sessionStorage.getItem('token');
-  return token ? <Outlet /> : <Navigate to="/login" replace />;
+  
+  if (!token) {
+    // Сохраняем текущий путь для редиректа после входа
+    const currentPath = window.location.pathname;
+    if (currentPath !== '/login') {
+      localStorage.setItem('redirectPath', currentPath);
+    }
+    return <Navigate to="/login" replace />;
+  }
+  
+  // Проверяем, не истек ли токен (базовая проверка)
+  try {
+    const tokenData = JSON.parse(atob(token.split('.')[1]));
+    const currentTime = Date.now() / 1000;
+    
+    if (tokenData.exp && tokenData.exp < currentTime) {
+      // Токен истек
+      localStorage.removeItem('token');
+      sessionStorage.removeItem('token');
+      localStorage.removeItem('role');
+      sessionStorage.removeItem('role');
+      const currentPath = window.location.pathname;
+      if (currentPath !== '/login') {
+        localStorage.setItem('redirectPath', currentPath);
+      }
+      return <Navigate to="/login" replace />;
+    }
+  } catch (error) {
+    // Если токен поврежден, очищаем его
+    localStorage.removeItem('token');
+    sessionStorage.removeItem('token');
+    localStorage.removeItem('role');
+    sessionStorage.removeItem('role');
+    const currentPath = window.location.pathname;
+    if (currentPath !== '/login') {
+      localStorage.setItem('redirectPath', currentPath);
+    }
+    return <Navigate to="/login" replace />;
+  }
+  
+  return <Outlet />;
 };
 
 const App: React.FC = () => {
-  const [mode, setMode] = useState<'light' | 'dark'>('dark');
+  const [mode, setMode] = useState<'light' | 'dark'>('light');
   const theme = useMemo(() => createTheme({
     palette: {
       mode,
@@ -26,30 +72,26 @@ const App: React.FC = () => {
     shape: { borderRadius: 12 },
   }), [mode]);
 
-  const toggleTheme = () => setMode(prev => (prev === 'dark' ? 'light' : 'dark'));
-
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Router>
-        <AppBar position="static" color="primary" enableColorOnDark>
-          <Toolbar>
-            <Typography variant="h6" sx={{ flexGrow: 1 }}>
-              Учёт картриджей МФУ
-            </Typography>
-            <ThemeToggle toggleTheme={toggleTheme} />
-          </Toolbar>
-        </AppBar>
-        <Box sx={{ minHeight: 'calc(100vh - 64px)', bgcolor: 'background.default' }}>
-          <Container maxWidth="sm" sx={{ py: 4 }}>
-            <Routes>
-              <Route path="/login" element={<LoginPage />} />
-              <Route element={<PrivateRoute />}>
+        <Box sx={{ minHeight: '100vh', bgcolor: 'background.default' }}>
+          <Routes>
+            <Route path="/login" element={<LoginPage />} />
+            <Route element={<PrivateRoute />}>
+              <Route element={<AppLayout />}>
+                <Route path="/" element={<Navigate to="/dashboard" replace />} />
                 <Route path="/dashboard" element={<DashboardPage />} />
+                <Route path="/users" element={<UsersPage />} />
+                <Route path="/cartridges" element={<CartridgesPage />} />
+                <Route path="/locations" element={<LocationsPage />} />
+                <Route path="/operations" element={<OperationsPage />} />
+                <Route path="/reports" element={<ReportsPage />} />
               </Route>
-              <Route path="*" element={<Navigate to="/login" />} />
-            </Routes>
-          </Container>
+            </Route>
+            <Route path="*" element={<Navigate to="/login" />} />
+          </Routes>
         </Box>
       </Router>
     </ThemeProvider>

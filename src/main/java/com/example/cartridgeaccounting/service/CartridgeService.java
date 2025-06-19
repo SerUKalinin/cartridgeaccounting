@@ -32,4 +32,8 @@ public interface CartridgeService {
     long getCartridgeCountByStatus(CartridgeStatus status);
     
     long getCartridgeCountByLocationAndStatus(UUID locationId, CartridgeStatus status);
+    
+    long getTotalCartridgeCount();
+    
+    long getCartridgeCountByLocation(UUID locationId);
 } 
